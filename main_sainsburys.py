@@ -2,7 +2,7 @@ from pprint import pprint
 from time import sleep
 import customtkinter as ctkinter
 import tkinter
-import asda_data_interpreter
+import sainsburys_data_interpreter
 
 START_INDEX = 0
 MAX_ROWS = 3
@@ -21,13 +21,13 @@ class App(ctkinter.CTk):
         self.excel_file_path = "Not selected"
         
         # Configure window
-        self.title("ASDA vouchers")
+        self.title("Sainsbury's vouchers")
         self.geometry("525x725")
 
         self.frame = ctkinter.CTkFrame(master=self)
         self.frame.pack(pady=20, padx=20, fill="both", expand=True)
 
-        self.logo_label = ctkinter.CTkLabel(master=self.frame, text="Automatic ASDA voucher code receiver", font=ctkinter.CTkFont(size=20, weight="bold")).pack(anchor='n', pady=10)
+        self.logo_label = ctkinter.CTkLabel(master=self.frame, text="Automatic Sainsbury's voucher balance checker", font=ctkinter.CTkFont(size=20, weight="bold")).pack(anchor='n', pady=10)
 
         self.select_file_button = ctkinter.CTkButton(master=self.frame, text="Select excel file", command=self.select_file).pack(anchor='n', pady=10)
         self.file_path_label = ctkinter.CTkLabel(master=self.frame, text=f"File path: {excel_file_path}", font=ctkinter.CTkFont(weight="bold"), wraplength=250)
@@ -120,7 +120,7 @@ class App(ctkinter.CTk):
         self.set_message("Reading excel file...")
         print("Reading excel file...")
         try:
-            refs_and_urls = asda_data_interpreter.get_refs_and_urls_from_excel(self.excel_file_path, ref_column, url_columns)
+            refs_and_urls = sainsburys_data_interpreter.get_refs_and_urls_from_excel(self.excel_file_path, ref_column, url_columns)
             if len(refs_and_urls) == 0:
                 self.set_message("ERROR: NO DATA FOUND")
                 print("ERROR: NO DATA FOUND")
@@ -133,16 +133,16 @@ class App(ctkinter.CTk):
         
         self.set_message("Receiving data from the web. This may take up to 20 minutes...")
         print(f"Receiving data from the web. This may take up to 20 minutes...")
-        refs_and_vouchers = [] # Once we receive the details for the vouchers, the urls are no longer needed
+        refs_and_balances = [] # Once we receive the details for the vouchers, the urls are no longer needed
         rows_done = 0 # This is used when checking if we've reached the limit of rows. Mainly when degugging
         upper_limit = len(refs_and_urls) if MAX_ROWS == 0 else START_INDEX + MAX_ROWS
         for i in range(START_INDEX, upper_limit):
             row = refs_and_urls[i]
             # row is a dict in the form: {ref: xxx, urls: []}
-            vouchers = []
+            balances = []
             for url in row['urls']:
                 try:
-                    vouchers.append(asda_data_interpreter.get_voucher_details_from_url(url))
+                    balances.append(sainsburys_data_interpreter.get_balance_from_url(url))
                     self.set_message(f"{i+1} rows of spreadsheet done. {upper_limit-(i+1)} remaining...")
                     print(f"{i} rows of spreadsheet done. {upper_limit - i} remaining...")
                 except:
@@ -151,11 +151,11 @@ class App(ctkinter.CTk):
                     print("Something went wrong while reading webpage. This may be a connection issue or the urls are not in the correct format/ column")
                     return
             try:
-                refs_and_vouchers.append({
+                refs_and_balances.append({
                     'ref': row['ref'],
-                    'vouchers': vouchers
+                    'balances': balances
                 })
-                self.update_progress(len(refs_and_vouchers), upper_limit)
+                self.update_progress(len(refs_and_balances), upper_limit)
             except:
                 self.set_message("Data is in the wrong format")
                 self.popup("ERROR", "Data is in the wrong format")
@@ -163,16 +163,16 @@ class App(ctkinter.CTk):
                 return
             rows_done += 1
         print("Data received!")
-        print("Theses are the voucher codes and pins received:")
+        print("Theses are the balances received:")
         try:
-            pprint(refs_and_vouchers)
+            pprint(refs_and_balances)
         except:
-            pass
+            pass # The program is in no console mode
 
         self.set_message("Saving data...")
         print("Saving data...")
         try:
-            asda_data_interpreter.save_data_to_excel(refs_and_vouchers, "asda_result.xlsx")
+            sainsburys_data_interpreter.save_data_to_excel(refs_and_balances, "sainsburys_result.xlsx")
         except:
             self.set_message("There was an error saving the excel file.")
             self.popup("ERROR", "Data is in the wrong format")
@@ -181,7 +181,7 @@ class App(ctkinter.CTk):
 
         self.set_message("Done!")
         print("Done!")
-        self.popup("Finished", "The task has completed. The output file is saved as 'asda_result.xlsx' in the same folder as this program.")
+        self.popup("Finished", "The task has completed. The output file is saved as 'sainsburys_result.xlsx' in the same folder as this program.")
         self.destroy()
 
 if __name__ == "__main__":
