@@ -1,0 +1,10 @@
+pandas
+BeautifulSoup
+requests
+validators
+customtkinter
+pyinstaller: pyinstaller --noconfirm --onefile --windowed --add-data "C:\Python39\Lib\site-packages\customtkinter;customtkinter/" .\main.py
+
+pyinstaller --noconfirm --onefile --windowed --add-data "C:\Users\tomim\AppData\Local\Programs\Python\Python310\Lib\site-packages\customtkinter;customtkinter/" \main.py
+
+pyinstaller --noconfirm --onefile --windowed --add-data "C:\Users\tomim\AppData\Local\Programs\Python\Python310\Lib\site-packages\customtkinter;customtkinter/" --add-data "C:\Users\tomim\AppData\Local\Programs\Python\Python310\Lib\site-packages\charset_normalizer;charset_normalizer/" \main.py
