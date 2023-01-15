@@ -3,3 +3,4 @@ urls.txt
 TODO.txt
 testtk.py
 data.xlsx
+__pycache__/
