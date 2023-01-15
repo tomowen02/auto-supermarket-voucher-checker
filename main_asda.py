@@ -3,6 +3,7 @@ from time import sleep
 import customtkinter as ctkinter
 import tkinter
 import asda_data_interpreter
+from threading import Thread
 
 START_INDEX = 0
 MAX_ROWS = 3
@@ -55,7 +56,7 @@ class App(ctkinter.CTk):
         self.col_N_urls_checkbox = ctkinter.CTkCheckBox(master=self.frame, variable=self.col_N_var, text="N").pack(anchor='n', pady=5)
         self.col_O_urls_checkbox = ctkinter.CTkCheckBox(master=self.frame, variable=self.col_O_var, text="O").pack(anchor='n', pady=5)
                 
-        self.start = ctkinter.CTkButton(master=self.frame, text="Start the process", command=self.start_process).pack(pady=10)
+        self.start = ctkinter.CTkButton(master=self.frame, text="Start the process", command=Thread(target=self.start_process, daemon=True).start).pack(pady=10)
         
         self.progress_bar_label = ctkinter.CTkLabel(master=self.frame, text="Progress: ").pack(anchor='n', pady=5)
         self.progress_bar = ctkinter.CTkProgressBar(self.frame)
@@ -102,7 +103,6 @@ class App(ctkinter.CTk):
     
     def set_message(self, message):
         self.message_label.configure(text=message)
-        self.update()
     
     def popup(self, title, message):
         tkinter.messagebox.showinfo(title=title, message=message)
