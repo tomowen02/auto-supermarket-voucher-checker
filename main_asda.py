@@ -6,7 +6,7 @@ import asda_data_interpreter
 from threading import Thread
 
 START_INDEX = 0
-MAX_ROWS = 3
+MAX_ROWS = 0
 
 excel_file_path = "Not selected"
 
