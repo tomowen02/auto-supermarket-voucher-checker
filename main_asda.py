@@ -2,7 +2,7 @@ from pprint import pprint
 from time import sleep
 import customtkinter as ctkinter
 import tkinter
-import data_interpreter
+import asda_data_interpreter
 
 START_INDEX = 0
 MAX_ROWS = 3
@@ -119,7 +119,7 @@ class App(ctkinter.CTk):
         self.set_message("Reading excel file...")
         print("Reading excel file...")
         try:
-            refs_and_urls = data_interpreter.get_refs_and_urls_from_excel(self.excel_file_path, ref_column, url_columns)
+            refs_and_urls = asda_data_interpreter.get_refs_and_urls_from_excel(self.excel_file_path, ref_column, url_columns)
             if len(refs_and_urls) == 0:
                 self.set_message("ERROR: NO DATA FOUND")
                 print("ERROR: NO DATA FOUND")
@@ -141,7 +141,7 @@ class App(ctkinter.CTk):
             vouchers = []
             for url in row['urls']:
                 try:
-                    vouchers.append(data_interpreter.get_voucher_details_from_url(url))
+                    vouchers.append(asda_data_interpreter.get_voucher_details_from_url(url))
                     self.set_message(f"{i+1} rows of spreadsheet done. {upper_limit-(i+1)} remaining...")
                     print(f"{i} rows of spreadsheet done. {upper_limit - i} remaining...")
                 except:
@@ -171,7 +171,7 @@ class App(ctkinter.CTk):
         self.set_message("Saving data...")
         print("Saving data...")
         try:
-            data_interpreter.save_data_to_excel(refs_and_vouchers, "result.xlsx")
+            asda_data_interpreter.save_data_to_excel(refs_and_vouchers, "result.xlsx")
         except:
             self.set_message("There was an error saving the excel file.")
             self.popup("ERROR", "Data is in the wrong format")
