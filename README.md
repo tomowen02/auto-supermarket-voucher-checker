@@ -19,3 +19,5 @@ This project is designed to help a local charity which distributes supermarket f
 
 ### The process for manually checking the balances for other supermarkets only has one step:
 The user clicks the link for the voucher, and the balance is displayed on the web page received
+
+[![HaEvd7V.md.png](https://iili.io/HaEvd7V.md.png)](https://freeimage.host/i/HaEvd7V)
